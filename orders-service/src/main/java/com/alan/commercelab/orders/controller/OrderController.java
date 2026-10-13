@@ -1,7 +1,7 @@
 package com.alan.commercelab.orders.controller;
 
 import com.alan.commercelab.orders.dto.OrderResponse;
-import com.alan.commercelab.orders.service.OrderService;
+import com.alan.commercelab.orders.service.OrderServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,23 +13,23 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
-    private final OrderService orderService;
+    private final OrderServiceImpl orderServiceImpl;
 
-    public OrderController(OrderService orderService){
-        this.orderService = orderService;
+    public OrderController(OrderServiceImpl orderServiceImpl){
+        this.orderServiceImpl = orderServiceImpl;
     }
 
     @GetMapping
     public List<OrderResponse> getOrders(){
-        return orderService.findAll();
+        return orderServiceImpl.findAll();
     }
 
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderResponse> getOrderById(@PathVariable String orderId){
 
-        return orderService.findById(orderId)
-                .map(ResponseEntity::ok)
-                .orElseGet(()-> ResponseEntity.notFound().build());
+        OrderResponse order = orderServiceImpl.findById(orderId);
+
+        return ResponseEntity.ok(order);
 
     }
 }

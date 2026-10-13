@@ -2,6 +2,7 @@ package com.alan.commercelab.orders.service;
 
 
 import com.alan.commercelab.orders.dto.OrderResponse;
+import com.alan.commercelab.orders.exception.OrderNotFoundException;
 import com.alan.commercelab.orders.interfaces.IOrderService;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class OrderService implements IOrderService {
+public class OrderServiceImpl implements IOrderService {
     private final List<OrderResponse> orders = List.of(
             new OrderResponse("ORD-001","PENDING"),
             new OrderResponse("ORD-002","CONFIRMED")
@@ -22,9 +23,10 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public Optional<OrderResponse> findById(String orderId) {
+    public OrderResponse findById(String orderId) {
         return orders.stream()
                 .filter(orderResponse -> orderResponse.id().equals(orderId))
-                .findFirst();
+                .findFirst()
+                .orElseThrow(()-> new OrderNotFoundException(orderId));
     }
 }

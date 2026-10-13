@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface IOrderService {
     List<OrderResponse> findAll();
 
-    Optional<OrderResponse> findById(String orderId);
+    OrderResponse findById(String orderId);
 }
